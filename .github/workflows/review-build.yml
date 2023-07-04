@@ -70,7 +70,7 @@ jobs:
           pwd
           west init -l .
           #sed -i "s:= zephyr: = zephyr_rv:g" ../.west/config
-          #west update
+          west update
 
       - name: build for primary board
         run: |
