@@ -43,6 +43,7 @@ jobs:
 
       - name: install toolchain
         run: |
+          set -x
           mkdir -p ${{ runner.temp }}/../toolchain/
           pushd ${{ runner.temp }}/../toolchain/
           wget --no-verbose "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_VERSION}/zephyr-sdk-${SDK_VERSION}_linux-x86_64_minimal.tar.gz"
@@ -51,6 +52,7 @@ jobs:
           tar -xf toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz -C zephyr-sdk-${SDK_VERSION}
           #TOOLCHAIN_PATH="$(readlink -f ${PWD}/zephyr-sdk-${SDK_VERSION})"
           readlink -f "${{ runner.temp }}/../toolchain/zephyr-sdk-${SDK_VERSION}/arm-zephyr-eabi/bin" >> $GITHUB_PATH
+          set +x
           popd
 
       - name: checkout source
@@ -58,15 +60,20 @@ jobs:
 
       - name: setup west
         run: |
+          set -x
+          pwd
           west init -l .
           #sed -i "s:= zephyr: = zephyr_rv:g" ../.west/config
-          west update
+          #west update
 
       - name: build for primary board
         run: |
           #sed -i "s:= zephyr: = zephyr_rv:g" ../.west/config
+          set -x
+          ls ${{ runner.temp }}/../*
           pushd ..
           ln -sf zephyr_rv zephyr
           popd
-          source ${{ runner.temp }}/../toolchain/zephyr-sdk-${SDK_VERSION}/environment-setup-x86_64-pokysdk-linux
+          source ${{ runner.temp }}/../*/*/zephyr-sdk-${SDK_VERSION}/environment-setup-x86_64-pokysdk-linux
           west build -b qemu_cortex_m3 samples/hello_world -- -G"Unix Makefiles"
+          set +x
