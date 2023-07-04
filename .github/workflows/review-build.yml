@@ -46,6 +46,7 @@ jobs:
           wget --no-verbose "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_VERSION}/toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz"
           tar -xf toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz -C zephyr-sdk-${SDK_VERSION}
           TOOLCHAIN_PATH="$(readlink -f ${PWD}/zephyr-sdk-${SDK_VERSION})"
+          echo "=== ${TOOLCHAIN_PATH}"
           pushd zephyr-sdk-${SDK_VERSION}
           SDK_PATH=$PWD
           ./setup.sh -h -c
@@ -67,5 +68,5 @@ jobs:
           #pushd ..
           #ln -sf zephyr_rv zephyr
           #popd
-          source ${TOOLCHAIN_PATH}/environment-setup-x86_64-pokysdk-linux
+          source /home/runner/work/toolchain/zephyr-sdk-${SDK_VERSION}/environment-setup-x86_64-pokysdk-linux
           west build -b qemu_cortex_m3 samples/hello_world -- -G"Unix Makefiles"
