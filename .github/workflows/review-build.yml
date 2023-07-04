@@ -38,7 +38,7 @@ jobs:
       - name: install west cmake
         run: |
           sudo pip3 install -U setuptools wheel pip
-          pip3 install west==${WEST_VERSION}
+          pip3 install west==${WEST_VERSION} pyelftools
           pip3 install cmake==${CMAKE_VERSION}
 
       - name: install toolchain
