@@ -64,7 +64,7 @@ jobs:
       - name: build for primary board
         run: |
           #sed -i "s:= zephyr: = zephyr_rv:g" ../.west/config
-          pushd
+          pushd ..
           ln -sf zephyr_rv zephyr
           popd
           west build -b qemu_cortex_m3 samples/hello_world -- -G"Unix Makefiles"
