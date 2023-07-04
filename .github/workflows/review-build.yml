@@ -51,6 +51,10 @@ jobs:
           wget --no-verbose "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_VERSION}/toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz"
           tar -xf toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz -C zephyr-sdk-${SDK_VERSION}
           #TOOLCHAIN_PATH="$(readlink -f ${PWD}/zephyr-sdk-${SDK_VERSION})"
+          pushd zephyr-sdk-${SDK_VERSION}
+          SDK_PATH=$PWD
+          ./setup.sh -h -c
+          popd
           echo "/home/runner/work/toolchain/zephyr-sdk-${SDK_VERSION}/arm-zephyr-eabi/bin"
           readlink -f "/home/runner/work/toolchain/zephyr-sdk-${SDK_VERSION}/arm-zephyr-eabi/bin" >> $GITHUB_PATH
           echo $GITHUB_PATH
@@ -72,7 +76,7 @@ jobs:
         run: |
           #sed -i "s:= zephyr: = zephyr_rv:g" ../.west/config
           set -x
-          ls ${{ runner.temp }}/../*
+          #ls ${{ runner.temp }}/../*
           pushd ..
           ln -sf zephyr_rv zephyr
           popd
