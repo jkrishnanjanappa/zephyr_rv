@@ -58,10 +58,13 @@ jobs:
       - name: setup west
         run: |
           west init -l .
-          sed -i "s:= zephyr: = zephyr_rv:g" ../.west/config
+          #sed -i "s:= zephyr: = zephyr_rv:g" ../.west/config
           west update
 
       - name: build for primary board
         run: |
           #sed -i "s:= zephyr: = zephyr_rv:g" ../.west/config
+          pushd
+          ln -sf zephyr_rv zephyr
+          popd
           west build -b qemu_cortex_m3 samples/hello_world -- -G"Unix Makefiles"
