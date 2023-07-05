@@ -34,7 +34,7 @@ jobs:
         
       - name: check spell and Jira ID 
         run : |
-          git show $${{ github.sha }} > commit.log
+          git show ${{ github.sha }} > commit.log
           cat commit.log
           cat commit.log | grep "^+" | codespell - > codespell_output.txt
           if [ -s codespell_output.txt ] ; then
