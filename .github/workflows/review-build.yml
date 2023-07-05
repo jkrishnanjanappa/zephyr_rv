@@ -22,16 +22,38 @@ env:
   SDK_VERSION: 0.15.0
 
 jobs:
-  check_commit:
-    name: Check the spelling and Jira ID
+  #check_commit:
+  #  name: Check the spelling and Jira ID
+  #  runs-on: ubuntu-20.04
+  #  steps:
+  #    - name: install git codespell
+  #      run: |
+  #        sudo apt-get install git codespell
+  #    - name: checkout source
+  #      uses: actions/checkout@v3
+  #      
+  #    - name: check spell and Jira ID 
+  #      run : |
+  #        git show ${{ github.sha }} > commit.log
+  #        cat commit.log
+  #        cat commit.log | grep "^+" | codespell - > codespell_output.txt
+  #        if [ -s codespell_output.txt ] ; then
+  #            echo -e "ERROR: codespell returned the following suggestion on spelling.\n"
+  #            echo -e "Correct them and submit again\n"
+  #            cat codespell_output.txt
+  #        fi
+  zephyr_build:
+    name: Build Zephyr before merge
     runs-on: ubuntu-20.04
     steps:
-      - name: install git codespell
+      - name: setup host
         run: |
-          sudo apt-get install git codespell
+          sudo apt-get update
+          sudo apt-get install python3-pip cmake git codespell
+          
       - name: checkout source
         uses: actions/checkout@v3
-        
+
       - name: check spell and Jira ID 
         run : |
           git show ${{ github.sha }} > commit.log
@@ -42,15 +64,7 @@ jobs:
               echo -e "Correct them and submit again\n"
               cat codespell_output.txt
           fi
-
-  zephyr_build:
-    name: Build Zephyr before merge
-    runs-on: ubuntu-20.04
-    steps:
-      - name: setup host
-        run: |
-          sudo apt-get update
-          sudo apt-get install python3-pip cmake
+    
       - name: install west cmake
         run: |
           sudo pip3 install -U setuptools wheel pip
@@ -70,10 +84,7 @@ jobs:
           readlink -f "$PWD/arm-zephyr-eabi/bin" >> $GITHUB_PATH
           popd
           popd
-
-      #- name: checkout source
-      #  uses: actions/checkout@v3
-
+      
       - name: setup west
         run: |
           echo "Workflow being run by ${{ github.actor }} ID: ${{ github.actor_id }}"
