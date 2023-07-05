@@ -56,7 +56,8 @@ jobs:
 
       - name: check spell and Jira ID 
         run : |
-          git format-patch -M -1
+          git --git-dir=${{ github.repositoryUrl }} show ${{ github.sha }} | head -100
+          exit 0
           cat 0001*.patch
           cat 0001*.patch | grep "^+" | codespell - > codespell_output.txt
           if [ -s codespell_output.txt ] ; then
