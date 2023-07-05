@@ -56,9 +56,9 @@ jobs:
 
       - name: check spell and Jira ID 
         run : |
-          git show ${{ github.sha }} > commit.log
-          cat commit.log
-          cat commit.log | grep "^+" | codespell - > codespell_output.txt
+          git format-patch -M -1
+          cat 0001*.patch
+          cat 0001*.patch | grep "^+" | codespell - > codespell_output.txt
           if [ -s codespell_output.txt ] ; then
               echo -e "ERROR: codespell returned the following suggestion on spelling.\n"
               echo -e "Correct them and submit again\n"
