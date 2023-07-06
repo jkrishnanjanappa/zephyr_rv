@@ -42,11 +42,8 @@ jobs:
 
       - name: check spell and Jira ID 
         run : |
-          git show ${GITHUB_SHA}  | grep "^+"
-          git show ${GITHUB_SHA}  | grep "^+" | \
-          codespell - 2>&1 | tee codespell_output.txt
-          exit 0
-          if [ -s "codespell_output.txt" ] ; then
+          codespell_output=$(git show ${GITHUB_SHA} | grep "^+" | codespell -)
+          if [ ! -z "$codespell_output" ] ; then
             echo "ERROR:codespell gave the following suggestion on spelling."
             echo "Correct them and submit again\n"
             cat codespell_output.txt
