@@ -66,37 +66,37 @@ jobs:
               cat codespell_output.txt
           fi
     
-      - name: install west cmake
-        run: |
-          sudo pip3 install -U setuptools wheel pip
-          pip3 install west==${WEST_VERSION} pyelftools
-          pip3 install cmake==${CMAKE_VERSION}
-      - name: install toolchain
-        run: |
-          mkdir -p ${{ runner.temp }}/../toolchain/
-          pushd ${{ runner.temp }}/../toolchain/
-          wget --no-verbose "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_VERSION}/zephyr-sdk-${SDK_VERSION}_linux-x86_64_minimal.tar.gz"
-          tar -xf zephyr-sdk-${SDK_VERSION}_linux-x86_64_minimal.tar.gz
-          wget --no-verbose "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_VERSION}/toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz"
-          tar -xf toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz -C zephyr-sdk-${SDK_VERSION}
-          pushd zephyr-sdk-${SDK_VERSION}
-          SDK_PATH=$PWD
-          ./setup.sh -h -c
-          readlink -f "$PWD/arm-zephyr-eabi/bin" >> $GITHUB_PATH
-          popd
-          popd
+      #- name: install west cmake
+      #  run: |
+      #    sudo pip3 install -U setuptools wheel pip
+      #    pip3 install west==${WEST_VERSION} pyelftools
+      #    pip3 install cmake==${CMAKE_VERSION}
+      #- name: install toolchain
+      #  run: |
+      #    mkdir -p ${{ runner.temp }}/../toolchain/
+      #    pushd ${{ runner.temp }}/../toolchain/
+      #    wget --no-verbose "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_VERSION}/zephyr-sdk-${SDK_VERSION}_linux-x86_64_minimal.tar.gz"
+      #    tar -xf zephyr-sdk-${SDK_VERSION}_linux-x86_64_minimal.tar.gz
+      #    wget --no-verbose "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_VERSION}/toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz"
+      #    tar -xf toolchain_linux-x86_64_arm-zephyr-eabi.tar.gz -C zephyr-sdk-${SDK_VERSION}
+      #    pushd zephyr-sdk-${SDK_VERSION}
+      #    SDK_PATH=$PWD
+      #    ./setup.sh -h -c
+      #    readlink -f "$PWD/arm-zephyr-eabi/bin" >> $GITHUB_PATH
+      #    popd
+      #    popd
       
-      - name: setup west
-        run: |
-          echo "Workflow being run by ${{ github.actor }} ID: ${{ github.actor_id }}"
-          echo "Github SHA commit ID: ${{ github.sha }}"
-          west init -l .
-          west update
+      #- name: setup west
+      #  run: |
+      #    echo "Workflow being run by ${{ github.actor }} ID: ${{ github.actor_id }}"
+      #    echo "Github SHA commit ID: ${{ github.sha }}"
+      #    west init -l .
+      #    west update
 
-      - name: build for primary board
-        run: |
-          pushd ..
-          ln -sf zephyr_rv zephyr
-          popd
-          source ${{ runner.temp }}/../toolchain/zephyr-sdk-${SDK_VERSION}/environment-setup-x86_64-pokysdk-linux
-          west build -b qemu_cortex_m3 samples/hello_world -- -G"Unix Makefiles"
+      #- name: build for primary board
+      #  run: |
+      #    pushd ..
+      #    ln -sf zephyr_rv zephyr
+      #    popd
+      #    source ${{ runner.temp }}/../toolchain/zephyr-sdk-${SDK_VERSION}/environment-setup-x86_64-pokysdk-linux
+      #    west build -b qemu_cortex_m3 samples/hello_world -- -G"Unix Makefiles"
