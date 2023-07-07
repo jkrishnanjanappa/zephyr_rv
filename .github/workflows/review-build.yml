@@ -47,8 +47,6 @@ jobs:
           git show | grep "^+" | codespell - || ( \
           echo "ERROR:codespell gave the above suggestion on spelling." \
           && echo "Correct them and submit again" && exit 1)
-          #git show | grep "^+" > ${RUNNER_TEMP}/addition_diff
-          #codespell ${RUNNER_TEMP}/addition_diff || ( \
 
       - name: install west cmake
         run: |
