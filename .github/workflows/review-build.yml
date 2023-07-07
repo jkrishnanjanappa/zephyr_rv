@@ -68,7 +68,7 @@ jobs:
           readlink -f "$PWD/arm-zephyr-eabi/bin" >> $GITHUB_PATH
           popd
           popd
-      
+
       - name: setup west
         run: |
           echo "Workflow being run by ${{ github.actor }} ID: ${{ github.actor_id }}"
