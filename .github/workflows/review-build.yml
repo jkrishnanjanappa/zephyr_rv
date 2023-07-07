@@ -45,17 +45,18 @@ jobs:
         run : |
           pip install codespell
           codespell --version
-          git show | grep "^+" > ${RUNNER_TEMP}/addition_diff
-          codespell ${RUNNER_TEMP}/addition_diff || \
+          git show | grep "^+" | codespell - > ${RUNNER_TEMP}/addition_diff ||\
           echo "ERROR:codespell gave the following suggestion on spelling." \
           && echo "Correct them and submit again" \
-          && cat ${RUNNER_TEMP}/addition_diff
+          && cat ${RUNNER_TEMP}/addition_diff && exit 1
 
-          if [ -s "${RUNNER_TEMP}/addition_diff" ] ; then
-            echo "ERROR:codespell gave the following suggestion on spelling."
-            echo "Correct them and submit again\n"
-            cat ${RUNNER_TEMP}/addition_diff
-          fi
+          #codespell ${RUNNER_TEMP}/addition_diff || \
+
+          #if [ -s "${RUNNER_TEMP}/addition_diff" ] ; then
+          #  echo "ERROR:codespell gave the following suggestion on spelling."
+          #  echo "Correct them and submit again\n"
+          #  cat ${RUNNER_TEMP}/addition_diff
+          #fi
           #python3.6 -c 'import subprocess; \
           #ps=subprocess.Popen(("git","show"),stdout=subprocess.PIPE); \
           #ll=subprocess.Popen(("grep", "^+"),stdin=ps.stdout, \
