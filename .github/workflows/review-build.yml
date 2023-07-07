@@ -24,7 +24,7 @@ env:
   CMAKE_VERSION: 3.20.5
   WEST_VERSION: 0.14.0
   SDK_VERSION: 0.15.0
-  CODESPELL_VERSION: 1.8-1
+  #CODESPELL_VERSION: 1.8-1
 
 jobs:
   zephyr_build:
@@ -35,7 +35,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install python3-pip cmake git \
-          codespell=${CODESPELL_VERSION}
+          codespell
+          #codespell=${CODESPELL_VERSION}
           
       - name: checkout source
         uses: actions/checkout@v3
