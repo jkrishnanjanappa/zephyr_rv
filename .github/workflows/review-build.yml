@@ -44,10 +44,11 @@ jobs:
         run : |
           pip install codespell
           codespell --version
-          git show | grep "^+" | codespell - > ${RUNNER_TEMP}/addition_diff ||\
-          echo "ERROR:codespell gave the following suggestion on spelling." \
-          && echo "Correct them and submit again" \
-          && cat ${RUNNER_TEMP}/addition_diff && exit 1
+          #git show | grep "^+" | codespell - > ${RUNNER_TEMP}/addition_diff ||
+          git show | grep "^+" > ${RUNNER_TEMP}/addition_diff
+          codespell ${RUNNER_TEMP}/addition_diff || \
+          echo "ERROR:codespell gave the above suggestion on spelling." \
+          && echo "Correct them and submit again" && exit 1
 
       - name: install west cmake
         run: |
