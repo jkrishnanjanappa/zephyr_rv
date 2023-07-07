@@ -44,8 +44,14 @@ jobs:
 
       - name: check spell and Jira ID 
         run : |
-          export SHA=${GITHUB_SHA}
-          python3 -c 'import subprocess;ps=subprocess.Popen(["git","show"],stdout=subprocess.PIPE,text=True); ll=subprocess.Popen(("grep", ^+"),stdin=ps.stdout,stdout=subprocess.PIPE,text=True);code=subprocess.check_output(("codespell","-"),stdin=ll.stdout,text=True); print(code)'
+          python3 -c 'import subprocess; \
+          ps=subprocess.Popen(("git","show"),stdout=subprocess.PIPE,text=True); \
+          ll=subprocess.Popen(("grep", "^+"),stdin=ps.stdout, \
+          stdout=subprocess.PIPE,text=True); \
+          code=subprocess.check_output(("codespell","-"), \
+          stdin=ll.stdout,text=True); \
+          print("ERROR:codespell gave the following suggestion on spelling. \
+          Correct them and submit again\n" + code) if code else print()'
           #codespell_output=$(git show ${GITHUB_SHA} | grep "^+" | codespell -)
           #if [ ! -z "$codespell_output" ] ; then
           #  echo "ERROR:codespell gave the following suggestion on spelling."
