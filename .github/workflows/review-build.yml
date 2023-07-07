@@ -24,7 +24,6 @@ env:
   CMAKE_VERSION: 3.20.5
   WEST_VERSION: 0.14.0
   SDK_VERSION: 0.15.0
-  #CODESPELL_VERSION: 2.0.0-1
 
 jobs:
   zephyr_build:
@@ -35,8 +34,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install python3-pip cmake git
-          #codespell=${CODESPELL_VERSION}
-          
+
       - name: checkout source
         uses: actions/checkout@v3
         with:
@@ -46,12 +44,12 @@ jobs:
         run : |
           pip install codespell
           codespell --version
-          
-          if git show | grep "^+" | codespell - > temp; then
+          git show | grep "^+" | codespell - > ${RUNNER_TEMP}/addition_diff
+          if [ -s "${RUNNER_TEMP}/addition_diff" ] ; then
             echo "ERROR:codespell gave the following suggestion on spelling."
             echo "Correct them and submit again\n"
-            cat temp
-          fi  
+            cat ${RUNNER_TEMP}/addition_diff
+          fi
           #python3.6 -c 'import subprocess; \
           #ps=subprocess.Popen(("git","show"),stdout=subprocess.PIPE); \
           #ll=subprocess.Popen(("grep", "^+"),stdin=ps.stdout, \
@@ -66,7 +64,7 @@ jobs:
           #  echo "Correct them and submit again\n"
           #  cat codespell_output.txt
           #fi
-    
+
       #- name: install west cmake
       #  run: |
       #    sudo pip3 install -U setuptools wheel pip
