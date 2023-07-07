@@ -34,8 +34,7 @@ jobs:
       - name: setup host
         run: |
           sudo apt-get update
-          sudo apt-get install python3-pip cmake git \
-          codespell
+          sudo apt-get install python3-pip cmake git
           #codespell=${CODESPELL_VERSION}
           
       - name: checkout source
@@ -45,6 +44,7 @@ jobs:
 
       - name: check spell and Jira ID 
         run : |
+          pip install codespell
           codespell --version
           git show > addition_diff.txt
           codespell addition_diff.txt
