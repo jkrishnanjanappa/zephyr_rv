@@ -45,14 +45,16 @@ jobs:
 
       - name: check spell and Jira ID 
         run : |
-          python3.6 -c 'import subprocess; \
-          ps=subprocess.Popen(("git","show"),stdout=subprocess.PIPE); \
-          ll=subprocess.Popen(("grep", "^+"),stdin=ps.stdout, \
-          stdout=subprocess.PIPE); \
-          code=subprocess.check_output(("codespell","-"), \
-          stdin=ll.stdout,universal_newlines=True); \
-          print("ERROR:codespell gave the following suggestion on spelling. \
-          Correct them and submit again\n" + code) if code else print()'
+          git show | grep "^+" > addition_diff.txt
+          codespell addition_diff.txt
+          #python3.6 -c 'import subprocess; \
+          #ps=subprocess.Popen(("git","show"),stdout=subprocess.PIPE); \
+          #ll=subprocess.Popen(("grep", "^+"),stdin=ps.stdout, \
+          #stdout=subprocess.PIPE); \
+          #code=subprocess.check_output(("codespell","-"), \
+          #stdin=ll.stdout,universal_newlines=True); \
+          #print("ERROR:codespell gave the following suggestion on spelling. \
+          #Correct them and submit again\n" + code) if code else print()'
           #codespell_output=$(git show ${GITHUB_SHA} | grep "^+" | codespell -)
           #if [ ! -z "$codespell_output" ] ; then
           #  echo "ERROR:codespell gave the following suggestion on spelling."
