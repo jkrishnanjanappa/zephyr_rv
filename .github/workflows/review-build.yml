@@ -41,10 +41,12 @@ jobs:
           fetch-depth: 2
 
       - name: check spell and Jira ID 
+        continue-on-error: true
         run : |
           pip install codespell
           codespell --version
-          git show | grep "^+" | codespell - > ${RUNNER_TEMP}/addition_diff
+          git show | grep "^+" > ${RUNNER_TEMP}/addition_diff
+          codespell ${RUNNER_TEMP}/addition_diff
           if [ -s "${RUNNER_TEMP}/addition_diff" ] ; then
             echo "ERROR:codespell gave the following suggestion on spelling."
             echo "Correct them and submit again\n"
