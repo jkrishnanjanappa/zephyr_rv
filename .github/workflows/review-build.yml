@@ -24,7 +24,7 @@ env:
   CMAKE_VERSION: 3.20.5
   WEST_VERSION: 0.14.0
   SDK_VERSION: 0.15.0
-  CODESPELL_VERSION: 1.16.0-2
+  CODESPELL_VERSION: 1.8
 
 jobs:
   zephyr_build:
@@ -44,12 +44,12 @@ jobs:
 
       - name: check spell and Jira ID 
         run : |
-          python3 -c 'import subprocess; \
-          ps=subprocess.Popen(("git","show"),stdout=subprocess.PIPE,text=True); \
+          python3.6 -c 'import subprocess; \
+          ps=subprocess.Popen(("git","show"),stdout=subprocess.PIPE); \
           ll=subprocess.Popen(("grep", "^+"),stdin=ps.stdout, \
-          stdout=subprocess.PIPE,text=True); \
+          stdout=subprocess.PIPE); \
           code=subprocess.check_output(("codespell","-"), \
-          stdin=ll.stdout,text=True); \
+          stdin=ll.stdout,universal_newlines=True); \
           print("ERROR:codespell gave the following suggestion on spelling. \
           Correct them and submit again\n" + code) if code else print()'
           #codespell_output=$(git show ${GITHUB_SHA} | grep "^+" | codespell -)
