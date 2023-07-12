@@ -47,7 +47,35 @@ jobs:
           git show | grep "^+" | codespell - || ( \
           echo "ERROR:codespell gave the above suggestion on spelling." \
           && echo "Correct them and submit again" && exit 1)
-
+          temp_file="${RUNNER_TEMP}/git_log.txt"
+          git log -1 > $temp_file
+          # check for Jira ID in the first line of the commit
+          cat $temp_file | head -5 | tail -1 | grep -q "[A-Z]\+-[0-9]\+" || \
+          (echo "ERROR:first line of the commit should contain Jira ID." && \
+          exit 1)
+          # check for Source field
+          cat $temp_file | grep -q "Source:" || \
+          (echo "ERROR:The commit message should contain 'Source:' field." \
+          && exit 1)
+          # check for Jira ID field
+          cat $temp_file | grep -q "JIRA ID:.*[A-Z]\+-[0-9]\+" || \
+          (echo "ERROR:The commit message should contain 'JIRA ID:' field." \
+          && exit 1)
+          # check for Type field
+          cat $temp_file | egrep -q \
+          "Type:.*(Defect Fix|Security Fix|Development|Integration|Enhancement)" \
+          || (echo "ERROR:The commit message should contain 'Type:' field." \
+          && exit 1)
+          # check for Disposition field
+          cat $temp_file | egrep -q \
+          "Disposition:.*(Local|Backport from|Ported from)" || (echo \
+          "ERROR:The commit message should contain 'Disposition:' field." \
+          && exit 1)
+          # check for Description field
+          cat $temp_file | egrep -q "Description:" || (echo \
+          "ERROR:The commit message should contain 'Description:' field." \
+          && exit 1)
+     
       - name: install west cmake
         run: |
           sudo pip3 install -U setuptools wheel pip
@@ -74,11 +102,12 @@ jobs:
           echo "Github SHA commit ID: ${{ github.sha }}"
           west init -l .
           west update
+          west config zephyr.base $PWD
 
       - name: build for primary board
         run: |
-          pushd ..
-          ln -sf zephyr_rv zephyr
-          popd
+          #pushd ..
+          #ln -sf zephyr_rv zephyr
+          #popd
           source ${{ runner.temp }}/../toolchain/zephyr-sdk-${SDK_VERSION}/environment-setup-x86_64-pokysdk-linux
           west build -b qemu_cortex_m3 samples/hello_world -- -G"Unix Makefiles"
