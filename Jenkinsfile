@@ -1,5 +1,5 @@
 node {
     stage('Check PR') {
-        sh 'git log'
+        sh 'ls -l'
     }
 }
