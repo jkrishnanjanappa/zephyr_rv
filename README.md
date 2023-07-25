@@ -1,5 +1,4 @@
 # README
 actual 
-again
-again
+added checkout scm
 again
